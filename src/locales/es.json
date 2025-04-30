@@ -1,6 +1,6 @@
 {
   "appName": "IkaTension",
-  "tagline": "Tu Registrador de Tensión Arterial Sencillo",
+  "tagline": "Tu Registrador de Tensión Arterial Sencillo (beta 1.0)",
   "systolicLabel": "Sistólica (mmHg)",
   "diastolicLabel": "Diastólica (mmHg)",
   "pulseLabel": "Pulso (ppm, opcional)",

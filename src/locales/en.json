@@ -1,6 +1,6 @@
 {
   "appName": "IkaTension",
-  "tagline": "Your Simple Blood Pressure Tracker",
+  "tagline": "Your Simple Blood Pressure Tracker (beta 1.0)",
   "systolicLabel": "Systolic (mmHg)",
   "diastolicLabel": "Diastolic (mmHg)",
   "pulseLabel": "Pulse (bpm, optional)",
