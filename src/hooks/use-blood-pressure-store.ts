@@ -24,16 +24,18 @@ export const useBloodPressureStore = create<BloodPressureState>()(
           timestamp: Date.now(), // Add timestamp
         };
         set((state) => ({
-          records: [...state.records, newRecord].sort((a, b) => b.timestamp - a.timestamp), // Keep sorted
+          // Ensure records is always an array before spreading
+          records: [...(Array.isArray(state.records) ? state.records : []), newRecord].sort((a, b) => b.timestamp - a.timestamp), // Keep sorted
         }));
       },
       deleteRecord: (id) => {
         set((state) => ({
-          records: state.records.filter((record) => record.id !== id),
+          // Ensure records is an array before filtering
+          records: (Array.isArray(state.records) ? state.records : []).filter((record) => record.id !== id),
         }));
       },
       clearRecords: () => set({ records: [] }),
-      setRecords: (records) => set({ records }),
+      setRecords: (records) => set({ records: Array.isArray(records) ? records.sort((a, b) => b.timestamp - a.timestamp) : [] }),
     }),
     {
       name: 'blood-pressure-storage', // Name of the item in localStorage
@@ -42,8 +44,10 @@ export const useBloodPressureStore = create<BloodPressureState>()(
       // This part ensures that on initial load, the store is populated from localStorage
       onRehydrateStorage: () => (state) => {
         if (state) {
-          // Ensure records are sorted after rehydration
-           state.records = state.records.sort((a, b) => b.timestamp - a.timestamp);
+          // Ensure records are sorted after rehydration and is an array
+           state.records = Array.isArray(state.records)
+             ? state.records.sort((a, b) => b.timestamp - a.timestamp)
+             : [];
         }
       }
     }
@@ -54,7 +58,9 @@ export const useBloodPressureStore = create<BloodPressureState>()(
 // This ensures the store is populated on the client side after the initial render
 if (typeof window !== 'undefined') {
   const initialRecords = getLocalStorageItem<BloodPressureRecord[]>('blood-pressure-storage', []);
-   // Sort initial records if needed
-   const sortedInitialRecords = initialRecords.sort((a, b) => b.timestamp - a.timestamp);
+   // Check if initialRecords is an array before sorting
+   const sortedInitialRecords = Array.isArray(initialRecords)
+     ? initialRecords.sort((a, b) => b.timestamp - a.timestamp)
+     : [];
    useBloodPressureStore.setState({ records: sortedInitialRecords });
 }
